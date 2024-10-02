@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Storytelling;
 using UnityEngine;
 
 
@@ -11,16 +12,31 @@ public class AutoDoorOpener : MonoBehaviour
     public float triggerDistance;
     public Animator doorAnimator;
     public GameObject player;
+    public int checkDelay = 5;
+
+    private int delayCounter = 0;
 
     void FixedUpdate()
     {
-        doorAnimator.SetBool("IsOpened", CheckPlayerNear());
+        if (delayCounter < checkDelay)
+        {
+            delayCounter++;
+            return;
+        }
+
+        Act();
+        delayCounter = 0;
     }
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, triggerDistance);
+    }
+
+    void Act()
+    {
+        doorAnimator.SetBool("IsOpened", CheckPlayerNear());
     }
 
     /// <summary>
